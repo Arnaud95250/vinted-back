@@ -111,4 +111,34 @@ router.get("/offer/offer_filter", async (req, res)=>{
     }
 })
 
+
+
+
+
+router.get("/offer", async (req, res)=>{
+    try {
+        const filters = {}; // un objet vide que je vais renplir avec des {Clés: Value}
+
+        if(req.query.title){
+            filters.product_name = new RegExp(req.query.title);
+        }  // Objet.clés         = value    ==>> j'attribut à mon ojbet vide une key et value   
+        if(req.query.description){
+            filters.product_name = new RegExp(req.query.description);
+        }  // Objet.clés         = value    ==>> j'attribut à mon ojbet vide une key et value   
+
+        if(req.query.price){ //Si j'ai rentré dans ma route price=40 (ou autre valeur)je peut rentrer dans la condition
+            filters.product_price = {$gte: Number(req.query.price)}; // $gte >= | ou  $gt > 
+        }   //Objet.clés          = value
+
+        if(req.query.image){
+            filters.product_image = new RegExp(req.query.image);
+        } 
+
+
+        res.status(200).json({offers: filters});
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+})
+
 module.exports = router;
